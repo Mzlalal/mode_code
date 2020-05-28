@@ -1,6 +1,5 @@
 package com.mzlalalal.ctrl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.mzlalalal.model.Element;
 import com.mzlalalal.model.Ret;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +9,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author Mzlalalal
@@ -49,16 +46,13 @@ public class ApiController {
     public synchronized void redisQueue() {
         ListOperations<String, Object> listOperations = redisTemplate.opsForList();
         Long size = listOperations.size("test");
-        List<Element> objectList = CollUtil.newArrayList();
         if (size < 5) {
             return;
         }
         while (size > 0) {
             Element element = (Element) listOperations.leftPop("test");
-            objectList.add(element);
             size--;
         }
-        System.out.println(CollUtil.join(objectList, ","));
         return;
     }
 }
